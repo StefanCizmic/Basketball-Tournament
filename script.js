@@ -162,9 +162,10 @@ const displayGroupStageStatistics = () => {
 
 displayGroupStageStatistics();
 
+console.log(`-----------------------`);
 console.log(`DRAW`);
 
-const ranks = () => {
+const getRanks = () => {
     let filteredTeams = {};
     let ranked = [];
     for (let groupStatistics in groupStageStatistics) {
@@ -183,9 +184,38 @@ const ranks = () => {
         ranked.push(...firstPlaceTeams, ...secondPlaceTeams, ...thirdPlaceTeams);
     }
     ranked.sort((a, b) => (b.Points && b.ScoredShoots) - (a.Points && a.ScoredShoots));
-    console.log(ranked);
+    ranked.map((rankedTeam, index) => {
+        for (let group in groups) {
+            groups[group].map(team => {
+                if (rankedTeam.TeamName === team.Team) {
+                    if (index < 8) {
+                        if (index < 2) {
+                            hat.D.push(team);
+                        } else if (index < 4) {
+                            hat.E.push(team);
+                        } else if (index < 6) {
+                            hat.F.push(team);
+                        } else if (index < 8) {
+                            hat.G.push(team);
+                        }
+                    }
+                }
+            });
+        }
+    });
 }
 
-ranks();
+getRanks();
+
+const displayRankedTeams = () => {
+    for (let key in hat) {
+        console.log(`${key}:`);
+        hat[key].map(team => {
+            console.log(`  ${team.Team}`);
+        });
+    }
+};
+
+displayRankedTeams();
 
 
