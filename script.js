@@ -7,14 +7,17 @@ const exibitions = exibitionsJSON;
 let groupStage = {};
 let groupStageStatistics = {};
 let hat = {D: [], E: [], F: [], G: []};
+let quarterFinals = {};
+let semiFinals = {};
+let finals = {};
 
-const generatePairs = () => {
-    for (let group in groups) {
-        const teams = groups[group];
-        groupStage[group] = [];
+const generatePairs = (stage, team) => {
+    for (let group in team) {
+        const teams = team[group];
+        stage[group] = [];
         for (let i = 0; i < teams.length; i++) {
             for (let j = i + 1; j < teams.length; j++) {
-                groupStage[group].push({
+                stage[group].push({
                     Match: {
                         Team1: teams[i],
                         Team2: teams[j],
@@ -27,13 +30,14 @@ const generatePairs = () => {
             }
         }
     }
+    return stage;
 }
 
-generatePairs();
+generatePairs(groupStage, groups);
 
-const winProbability = () => {
-    for (let groupSt in groupStage) {
-        const group = groupStage[groupSt];
+const winProbability = (teams) => {
+    for (let groupSt in teams) {
+        const group = teams[groupSt];
         for (let i = 0; i < group.length; i++) {
             const match = group[i].Match;
             const teamOneProbability = +(match.Team2.FIBARanking / (match.Team1.FIBARanking + match.Team2.FIBARanking) * 100).toFixed(2);
@@ -46,12 +50,12 @@ const winProbability = () => {
     }
 }
 
-winProbability();
+winProbability(groupStage);
 
-const results = () => {
+const getResults = (teams) => {
     const shotsPerGame = Math.floor(Math.random() * (190 - 150 + 1)) + 150;
-    for (let groupSt in groupStage) {
-        const group = groupStage[groupSt];
+    for (let groupSt in teams) {
+        const group = teams[groupSt];
         for (let i = 0; i < group.length; i++) {
             const odds = group[i].Odds;
             const teamOneResult = Math.floor((odds.Odds1 / 100) * shotsPerGame);
@@ -74,14 +78,14 @@ const results = () => {
     }
 }
 
-results();
+getResults(groupStage);
 
 console.log(`GROUP STAGE MATCHES`);
 
-const displayGroupStage = () => {
-    for (let groupSt in groupStage) {
+const displayMatches = (teams) => {
+    for (let groupSt in teams) {
         console.log(`Group: ${groupSt}`)
-        groupStage[groupSt].map(match => {
+        teams[groupSt].map(match => {
             console.log(`${match.Match.Team1.Team} vs ${match.Match.Team2.Team} = ${match.Result.Result1} : ${match.Result.Result2}`)
             console.log(`Win: ${match.Match.Win}`);
             console.log(`Lost: ${match.Match.Lost}`);
@@ -90,7 +94,7 @@ const displayGroupStage = () => {
     }
 }
 
-displayGroupStage();
+displayMatches(groupStage);
 
 console.log(`GROUP STAGE STATISTICS`);
 
@@ -218,4 +222,117 @@ const displayRankedTeams = () => {
 
 displayRankedTeams();
 
+console.log(`-----------------------`);
+console.log(`KNOCKOUT STAGE`);
 
+const getKnockoutStage = () => {
+    const groupPairs = [
+        ['D', 'G'],
+        ['E', 'F']
+    ]
+    groupPairs.map(([group1, group2]) => {
+        const teams1 = hat[group1];
+        const teams2 = hat[group2];
+        quarterFinals[`${group1}-${group2}`] = [];
+        for (let i = 0; i < Math.min(teams1.length, teams2.length); i++) {
+            quarterFinals[`${group1}-${group2}`].push({
+                        Match: {
+                            Team1: teams1[i],
+                            Team2: teams2[i],
+                            Win: '',
+                            Lost: ''
+                        },
+                        Odds: {},
+                        Result: {}
+                    });
+        }
+    })          
+};
+
+getKnockoutStage();
+
+const displayQuarterFinals = () => {
+for (let knockout in quarterFinals) {
+    const knockouts = quarterFinals[knockout];
+    knockouts.map(match => {
+    console.log(`${match.Match.Team1.Team} - ${match.Match.Team2.Team}`)
+    })
+}
+}
+
+displayQuarterFinals();
+
+console.log(`-----------------------`);
+
+winProbability(quarterFinals);
+getResults(quarterFinals);
+
+console.log(`QUARTERFINALS MATCHES`)
+
+displayMatches(quarterFinals);
+
+console.log(`SEMIFINALS MATCHES`);
+
+const filterQuarterFinals = () => {
+    let winnerNames = [];
+    let winners = {};
+    for (let quarter in quarterFinals) {
+        const quarterGames = quarterFinals[quarter];
+        winners[quarter] = [];
+        quarterGames.map(match => {
+           const winner = match.Match.Win; 
+           winnerNames.push(winner); 
+           if (winner === match.Match.Team1.Team) {
+               winners[quarter].push(match.Match.Team1);
+           } else if (winner === match.Match.Team2.Team) {
+               winners[quarter].push(match.Match.Team2);
+           }
+        });
+    }
+    semiFinals = (generatePairs(semiFinals, winners));
+}
+
+filterQuarterFinals();
+
+winProbability(semiFinals);
+getResults(semiFinals);
+displayMatches(semiFinals);
+
+console.log(`FINALS`)
+
+const filterSemiFinals = () => {
+    const winnerNames = [];
+    const winners = {};
+    for (let semi in semiFinals) {
+     const semiGames = semiFinals[semi];
+     winners[semi] = [];
+     semiGames.map(match => {
+         const winner = match.Match.Win;
+         winnerNames.push(winner);
+         if (winner === match.Match.Team1.Team) {
+            winners[semi].push(match.Match.Team1);
+         } else if (winner === match.Match.Team2.Team) {
+            winners[semi].push(match.Match.Team2);
+         }
+     }) 
+    }
+    const team1 = winners["D-G"][0]; 
+    const team2 = winners["E-F"][0];
+
+    finals["Final Match"] = [{
+        Match: {
+            Team1: team1,
+            Team2: team2,
+            Win: '',
+            Lost: ''
+        },
+        Odds: {},
+        Result: {}
+}];
+};
+
+filterSemiFinals();
+
+winProbability(finals);
+getResults(finals);
+displayMatches(finals);
