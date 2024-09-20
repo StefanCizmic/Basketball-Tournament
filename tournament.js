@@ -1,12 +1,14 @@
-import groupsJSON from './basketball-tournament-task-main/groups.json' with {type: 'json'};
-import exibitionsJSON from './basketball-tournament-task-main/exibitions.json'with { type: 'json'};
-
-const groups = groupsJSON;
-const exibitions = exibitionsJSON;
-
+console.log(`                           BASKETBALL TOURNAMENT`)
+let groupsJSON = require('./basketball-tournament-task-main/groups.json');
+let groups = groupsJSON;
 let groupStage = {};
 let groupStageStatistics = {};
-let hat = {D: [], E: [], F: [], G: []};
+let hat = {
+    D: [],
+    E: [],
+    F: [],
+    G: []
+};
 let quarterFinals = {};
 let semiFinals = {};
 let finals = {};
@@ -225,7 +227,7 @@ displayRankedTeams();
 console.log(`-----------------------`);
 console.log(`KNOCKOUT STAGE`);
 
-const getKnockoutStage = () => {
+const getQuarterFinals = () => {
     const groupPairs = [
         ['D', 'G'],
         ['E', 'F']
@@ -236,28 +238,28 @@ const getKnockoutStage = () => {
         quarterFinals[`${group1}-${group2}`] = [];
         for (let i = 0; i < Math.min(teams1.length, teams2.length); i++) {
             quarterFinals[`${group1}-${group2}`].push({
-                        Match: {
-                            Team1: teams1[i],
-                            Team2: teams2[i],
-                            Win: '',
-                            Lost: ''
-                        },
-                        Odds: {},
-                        Result: {}
-                    });
+                Match: {
+                    Team1: teams1[i],
+                    Team2: teams2[i],
+                    Win: '',
+                    Lost: ''
+                },
+                Odds: {},
+                Result: {}
+            });
         }
-    })          
+    })
 };
 
-getKnockoutStage();
+getQuarterFinals();
 
 const displayQuarterFinals = () => {
-for (let knockout in quarterFinals) {
-    const knockouts = quarterFinals[knockout];
-    knockouts.map(match => {
-    console.log(`${match.Match.Team1.Team} - ${match.Match.Team2.Team}`)
-    })
-}
+    for (let knockout in quarterFinals) {
+        const knockouts = quarterFinals[knockout];
+        knockouts.map(match => {
+            console.log(`${match.Match.Team1.Team} - ${match.Match.Team2.Team}`)
+        })
+    }
 }
 
 displayQuarterFinals();
@@ -273,22 +275,29 @@ displayMatches(quarterFinals);
 
 console.log(`SEMIFINALS MATCHES`);
 
-const filterQuarterFinals = () => {
+const filterGames = (game) => {
     let winnerNames = [];
     let winners = {};
-    for (let quarter in quarterFinals) {
-        const quarterGames = quarterFinals[quarter];
+    for (let quarter in game) {
+        const quarterGames = game[quarter];
         winners[quarter] = [];
         quarterGames.map(match => {
-           const winner = match.Match.Win; 
-           winnerNames.push(winner); 
-           if (winner === match.Match.Team1.Team) {
-               winners[quarter].push(match.Match.Team1);
-           } else if (winner === match.Match.Team2.Team) {
-               winners[quarter].push(match.Match.Team2);
-           }
+            const winner = match.Match.Win;
+            winnerNames.push(winner);
+            if (winner === match.Match.Team1.Team) {
+                winners[quarter].push(match.Match.Team1);
+            } else if (winner === match.Match.Team2.Team) {
+                winners[quarter].push(match.Match.Team2);
+            }
         });
     }
+    return winners;
+}
+
+filterGames();
+
+const filterQuarterFinals = () => {
+    const winners = filterGames(quarterFinals);
     semiFinals = (generatePairs(semiFinals, winners));
 }
 
@@ -301,22 +310,8 @@ displayMatches(semiFinals);
 console.log(`FINALS`)
 
 const filterSemiFinals = () => {
-    const winnerNames = [];
-    const winners = {};
-    for (let semi in semiFinals) {
-     const semiGames = semiFinals[semi];
-     winners[semi] = [];
-     semiGames.map(match => {
-         const winner = match.Match.Win;
-         winnerNames.push(winner);
-         if (winner === match.Match.Team1.Team) {
-            winners[semi].push(match.Match.Team1);
-         } else if (winner === match.Match.Team2.Team) {
-            winners[semi].push(match.Match.Team2);
-         }
-     }) 
-    }
-    const team1 = winners["D-G"][0]; 
+    const winners = filterGames(semiFinals);
+    const team1 = winners["D-G"][0];
     const team2 = winners["E-F"][0];
 
     finals["Final Match"] = [{
@@ -328,7 +323,7 @@ const filterSemiFinals = () => {
         },
         Odds: {},
         Result: {}
-}];
+    }];
 };
 
 filterSemiFinals();
