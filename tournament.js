@@ -55,22 +55,27 @@ const winProbability = (teams) => {
 winProbability(groupStage);
 
 const getResults = (teams) => {
-    const shotsPerGame = Math.floor(Math.random() * (190 - 150 + 1)) + 150;
     for (let groupSt in teams) {
         const group = teams[groupSt];
         for (let i = 0; i < group.length; i++) {
             const odds = group[i].Odds;
-            const teamOneResult = Math.floor((odds.Odds1 / 100) * shotsPerGame);
-            const teamTwoResult = Math.floor((odds.Odds2 / 100) * shotsPerGame);
-            group[i].Result = {
-                Result1: teamOneResult,
-                Result2: teamTwoResult
-            };
-
-            if (teamOneResult > teamTwoResult) {
+            const winnerShots = Math.floor(Math.random() * (120 - 100) + 100);
+            const loserShots = Math.floor(Math.random() * (100 - 80) + 80);
+            if (odds.Odds1 > odds.Odds2) {
+                group[i].Result = {
+                    Result1: winnerShots,
+                    Result2: loserShots
+                };
+            } else if (odds.Odds1 < odds.Odds2) {
+                group[i].Result = {
+                    Result1: loserShots,
+                    Result2: winnerShots
+                };
+            } else; 
+            if (group[i].Result.Result1 > group[i].Result.Result2) {
                 group[i].Match.Win = group[i].Match.Team1.Team;
                 group[i].Match.Lost = group[i].Match.Team2.Team;
-            } else if (teamTwoResult > teamOneResult) {
+            } else if (group[i].Result.Result1 < group[i].Result.Result2) {
                 group[i].Match.Win = group[i].Match.Team2.Team;
                 group[i].Match.Lost = group[i].Match.Team1.Team;
             } else {
