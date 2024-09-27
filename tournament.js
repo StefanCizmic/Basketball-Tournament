@@ -1,4 +1,3 @@
-console.log(`                           BASKETBALL TOURNAMENT`)
 let groupsJSON = require('./basketball-tournament-task-main/groups.json');
 let groups = groupsJSON;
 let groupStage = {};
@@ -13,21 +12,54 @@ let quarterFinals = {};
 let semiFinals = {};
 let finals = {};
 
+const getWinProbability = (team1, team2) => {
+    const teamOneProbability = +(team2.FIBARanking / (team1.FIBARanking + team2.FIBARanking) * 100).toFixed(2);
+    const teamTwoProbability = +(team1.FIBARanking / (team1.FIBARanking + team2.FIBARanking) * 100).toFixed(2);
+    return {
+        Odds1: teamOneProbability,
+        Odds2: teamTwoProbability
+    };
+}
+
+const getResults = (odds, team1, team2) => {
+    const winnerShots = Math.floor(Math.random() * (120 - 100) + 100);
+    const loserShots = Math.floor(Math.random() * (100 - 80) + 80);
+    if (odds.Odds1 > odds.Odds2) {
+        return {
+            Result1: winnerShots,
+            Result2: loserShots,
+            Won: team1.Team,
+            Lost: team2.Team
+        };
+    } else if (odds.Odds1 < odds.Odds2) {
+        return {
+            Result1: loserShots,
+            Result2: winnerShots,
+            Won: team2.Team,
+            Lost: team1.Team
+        };
+    } else;
+}
+
 const generatePairs = (stage, team) => {
     for (let group in team) {
         const teams = team[group];
         stage[group] = [];
         for (let i = 0; i < teams.length; i++) {
             for (let j = i + 1; j < teams.length; j++) {
+                const odds = getWinProbability(teams[i], teams[j]);
+                const results = getResults(odds, teams[i], teams[j]);
                 stage[group].push({
                     Match: {
                         Team1: teams[i],
                         Team2: teams[j],
-                        Win: '',
-                        Lost: ''
                     },
-                    Odds: {},
-                    Result: {}
+                    Odds: {
+                        ...odds
+                    },
+                    Result: {
+                        ...results
+                    }
                 });
             }
         }
@@ -35,75 +67,17 @@ const generatePairs = (stage, team) => {
     return stage;
 }
 
-generatePairs(groupStage, groups);
-
-const winProbability = (teams) => {
-    for (let groupSt in teams) {
-        const group = teams[groupSt];
-        for (let i = 0; i < group.length; i++) {
-            const match = group[i].Match;
-            const teamOneProbability = +(match.Team2.FIBARanking / (match.Team1.FIBARanking + match.Team2.FIBARanking) * 100).toFixed(2);
-            const teamTwoProbability = +(match.Team1.FIBARanking / (match.Team1.FIBARanking + match.Team2.FIBARanking) * 100).toFixed(2);
-            group[i].Odds = {
-                Odds1: teamOneProbability,
-                Odds2: teamTwoProbability
-            };
-        }
-    }
-}
-
-winProbability(groupStage);
-
-const getResults = (teams) => {
-    for (let groupSt in teams) {
-        const group = teams[groupSt];
-        for (let i = 0; i < group.length; i++) {
-            const odds = group[i].Odds;
-            const winnerShots = Math.floor(Math.random() * (120 - 100) + 100);
-            const loserShots = Math.floor(Math.random() * (100 - 80) + 80);
-            if (odds.Odds1 > odds.Odds2) {
-                group[i].Result = {
-                    Result1: winnerShots,
-                    Result2: loserShots
-                };
-            } else if (odds.Odds1 < odds.Odds2) {
-                group[i].Result = {
-                    Result1: loserShots,
-                    Result2: winnerShots
-                };
-            } else; 
-            if (group[i].Result.Result1 > group[i].Result.Result2) {
-                group[i].Match.Win = group[i].Match.Team1.Team;
-                group[i].Match.Lost = group[i].Match.Team2.Team;
-            } else if (group[i].Result.Result1 < group[i].Result.Result2) {
-                group[i].Match.Win = group[i].Match.Team2.Team;
-                group[i].Match.Lost = group[i].Match.Team1.Team;
-            } else {
-                group[i].Match.Win = 'Draw';
-            }
-        }
-    }
-}
-
-getResults(groupStage);
-
-console.log(`GROUP STAGE MATCHES`);
-
 const displayMatches = (teams) => {
     for (let groupSt in teams) {
         console.log(`Group: ${groupSt}`)
         teams[groupSt].map(match => {
             console.log(`${match.Match.Team1.Team} vs ${match.Match.Team2.Team} = ${match.Result.Result1} : ${match.Result.Result2}`)
-            console.log(`Win: ${match.Match.Win}`);
-            console.log(`Lost: ${match.Match.Lost}`);
+            console.log(`Won: ${match.Result.Won}`);
+            console.log(`Lost: ${match.Result.Lost}`);
             console.log(`-----------------------`);
         })
     }
 }
-
-displayMatches(groupStage);
-
-console.log(`GROUP STAGE STATISTICS`);
 
 const createGroupStageStatistics = () => {
     for (let group in groups) {
@@ -113,7 +87,7 @@ const createGroupStageStatistics = () => {
             let teamName = team.Team;
             groupStageStatistics[group].push({
                 TeamName: teamName,
-                Win: 0,
+                Won: 0,
                 Lost: 0,
                 Points: 0,
                 ScoredShoots: 0,
@@ -124,17 +98,15 @@ const createGroupStageStatistics = () => {
     }
 }
 
-createGroupStageStatistics();
-
 const getGroupStageStatistics = () => {
     for (let groupSt in groupStage) {
         groupStage[groupSt].map(matchs => {
             for (let groupStatistics in groupStageStatistics)
                 groupStageStatistics[groupStatistics].map(teamStat => {
-                    if (matchs.Match.Win === teamStat.TeamName) {
-                        teamStat.Win++;
+                    if (matchs.Result.Won === teamStat.TeamName) {
+                        teamStat.Won++;
                     };
-                    if (matchs.Match.Lost === teamStat.TeamName) {
+                    if (matchs.Result.Lost === teamStat.TeamName) {
                         teamStat.Lost++;
                     };
                     if (matchs.Match.Team1.Team === teamStat.TeamName) {
@@ -149,7 +121,7 @@ const getGroupStageStatistics = () => {
                     if (matchs.Match.Team2.Team === teamStat.TeamName) {
                         teamStat.ReceivedShoots += matchs.Result.Result1;
                     };
-                    teamStat.Points = (teamStat.Win * 2) + teamStat.Lost;
+                    teamStat.Points = (teamStat.Won * 2) + teamStat.Lost;
                     teamStat.Differential = (teamStat.ScoredShoots - teamStat.ReceivedShoots);
                     if (teamStat.Differential < 0) {
                         teamStat.Differential = -1 * (teamStat.ScoredShoots - teamStat.ReceivedShoots);
@@ -159,22 +131,15 @@ const getGroupStageStatistics = () => {
     }
 };
 
-getGroupStageStatistics();
-
 const displayGroupStageStatistics = () => {
     for (let groupStatistics in groupStageStatistics) {
-        const sorted = groupStageStatistics[groupStatistics].sort((a, b) => (b.Points && b.ScoredShoots) - (a.Points && a.ScoredShoots));
+        const sorted = groupStageStatistics[groupStatistics].sort((a, b) => (b.Points || b.ScoredShoots) - (a.Points || a.ScoredShoots));
         console.log(`Group: ${groupStatistics}`)
         sorted.map(teamStat => {
-            console.log(`${teamStat.TeamName} / ${teamStat.Win} / ${teamStat.Lost} / ${teamStat.Points} / ${teamStat.ScoredShoots} / ${teamStat.ReceivedShoots} / ${teamStat.Differential}`);
+            console.log(`${teamStat.TeamName} / ${teamStat.Won} / ${teamStat.Lost} / ${teamStat.Points} / ${teamStat.ScoredShoots} / ${teamStat.ReceivedShoots} / ${teamStat.Differential}`);
         });
     }
 }
-
-displayGroupStageStatistics();
-
-console.log(`-----------------------`);
-console.log(`DRAW`);
 
 const getRanks = () => {
     let filteredTeams = {};
@@ -216,8 +181,6 @@ const getRanks = () => {
     });
 }
 
-getRanks();
-
 const displayRankedTeams = () => {
     for (let key in hat) {
         console.log(`${key}:`);
@@ -226,11 +189,6 @@ const displayRankedTeams = () => {
         });
     }
 };
-
-displayRankedTeams();
-
-console.log(`-----------------------`);
-console.log(`KNOCKOUT STAGE`);
 
 const getQuarterFinals = () => {
     const groupPairs = [
@@ -242,21 +200,19 @@ const getQuarterFinals = () => {
         const teams2 = hat[group2];
         quarterFinals[`${group1}-${group2}`] = [];
         for (let i = 0; i < Math.min(teams1.length, teams2.length); i++) {
+            const odds = getWinProbability(teams1[i], teams2[i]);
+            const results = getResults(odds, teams1[i], teams2[i])
             quarterFinals[`${group1}-${group2}`].push({
                 Match: {
                     Team1: teams1[i],
                     Team2: teams2[i],
-                    Win: '',
-                    Lost: ''
                 },
-                Odds: {},
-                Result: {}
+                Odds: {...odds},
+                Result: {...results}
             });
         }
     })
 };
-
-getQuarterFinals();
 
 const displayQuarterFinals = () => {
     for (let knockout in quarterFinals) {
@@ -267,19 +223,6 @@ const displayQuarterFinals = () => {
     }
 }
 
-displayQuarterFinals();
-
-console.log(`-----------------------`);
-
-winProbability(quarterFinals);
-getResults(quarterFinals);
-
-console.log(`QUARTERFINALS MATCHES`)
-
-displayMatches(quarterFinals);
-
-console.log(`SEMIFINALS MATCHES`);
-
 const filterGames = (game) => {
     let winnerNames = [];
     let winners = {};
@@ -287,7 +230,7 @@ const filterGames = (game) => {
         const quarterGames = game[quarter];
         winners[quarter] = [];
         quarterGames.map(match => {
-            const winner = match.Match.Win;
+            const winner = match.Result.Won;
             winnerNames.push(winner);
             if (winner === match.Match.Team1.Team) {
                 winners[quarter].push(match.Match.Team1);
@@ -299,40 +242,50 @@ const filterGames = (game) => {
     return winners;
 }
 
-filterGames();
-
-const filterQuarterFinals = () => {
+const getSemiFinals = () => {
     const winners = filterGames(quarterFinals);
     semiFinals = (generatePairs(semiFinals, winners));
 }
 
-filterQuarterFinals();
-
-winProbability(semiFinals);
-getResults(semiFinals);
-displayMatches(semiFinals);
-
-console.log(`FINALS`)
-
-const filterSemiFinals = () => {
-    const winners = filterGames(semiFinals);
-    const team1 = winners["D-G"][0];
-    const team2 = winners["E-F"][0];
-
+const getFinals = () => {
+    const winners = filterGames(semiFinals); 
+    const team1 = winners["D-G"][0]; 
+    const team2 = winners["E-F"][0]; 
+    const odds = getWinProbability(team1, team2);
+    const results = getResults(odds, team1, team2);
     finals["Final Match"] = [{
         Match: {
             Team1: team1,
-            Team2: team2,
-            Win: '',
-            Lost: ''
+            Team2: team2
         },
-        Odds: {},
-        Result: {}
+        Odds: {...odds},
+        Result: {...results}
     }];
 };
 
-filterSemiFinals();
-
-winProbability(finals);
-getResults(finals);
+console.log(`                                BASKETBALL TOURNAMENT`);
+generatePairs(groupStage, groups);
+console.log(`GROUP STAGE MATCHES`);
+displayMatches(groupStage);
+console.log(`GROUP STAGE STATISTICS`);
+createGroupStageStatistics();
+getGroupStageStatistics();
+displayGroupStageStatistics();
+console.log(`-----------------------`);
+console.log(`DRAW`);
+getRanks();
+displayRankedTeams();
+console.log(`-----------------------`);
+console.log(`KNOCKOUT STAGE`);
+getQuarterFinals();
+displayQuarterFinals();
+console.log(`-----------------------`);
+console.log(`QUARTERFINALS MATCHES`);
+displayMatches(quarterFinals);
+console.log(`SEMIFINALS MATCHES`);
+filterGames();
+getSemiFinals();
+displayMatches(semiFinals);
+console.log(`FINALS`);
+getFinals();
 displayMatches(finals);
