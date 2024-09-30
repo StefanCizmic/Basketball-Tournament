@@ -1,0 +1,120 @@
+@font-face {
+  font-family: "CustomFont";
+  src: url("./font.ttf");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 100%;
+  height: 100vh;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.screen {
+  width: 80%;
+  height: 75%;
+  background-image: url("./background.avif");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  border: 3px solid white;
+  display: grid;
+  grid-template-rows: 1.5fr 3.5fr;
+  font-family: "CustomFont", sans-serif;
+}
+
+.fa-solid.fa-volume-high {
+  display: none;
+}
+
+.heading-container {
+  font-size: 23px;
+  display: grid;
+  grid-template-columns: 1fr 5fr 1fr;
+}
+
+.heading-container div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.heading-container i:hover {
+  cursor: pointer;
+}
+
+.tournament-heading {
+  position: relative;
+  animation: headingAnimation 1s infinite ease-in-out;
+}
+
+.game {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game button {
+  font-family: "CustomFont", sans-serif;
+  font-size: 16px;
+  padding: 25px;
+  margin-bottom: 50px;
+}
+
+.game button:hover {
+  cursor: pointer;
+}
+
+.play-msg {
+  visibility: hidden;
+  font-size: 14px;
+}
+
+.play-msg:hover {
+  cursor: pointer;
+}
+
+.groups-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.group-card {
+  width: 190px;
+  height: 160px;
+  margin: 20px;
+  border: 3px solid black;
+  font-size: 14px;
+}
+
+.group-card h3 {
+  font-weight: 600;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.group-card p {
+  color: #e8e4c9;
+  margin: 12px;
+  text-align: center;
+}
+
+@keyframes headingAnimation {
+  0% {
+    top: 0;
+  }
+  50% {
+    top: -5px;
+  }
+  100% {
+    top: 0;
+  }
+}

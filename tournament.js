@@ -1,13 +1,14 @@
-import groupsJSON from './basketball-tournament-task-main/groups.json' with {type: 'json'};
+import groupsJSON from './data/groups.json' with {type: 'json'};
 let groups = groupsJSON;
 
 // DOM
 
+const musicButtons = document.querySelectorAll('.fa-volume-high, .fa-volume-xmark');
+const song = document.getElementById('song');
 const playButton = document.getElementById("play-button");
-const tournamentHeading = document.getElementById("tournament-heading");
-const teamsHeading = document.getElementById("teams-heading");
-const game = document.getElementById('game');
-const teamCards = document.getElementsByClassName("team-card");
+const heading = document.getElementById('tournament-heading');
+const playMsg = document.getElementById('play-msg');
+const groupsContainer = document.getElementById('groups-container');
 
 // TOURNAMENT LOGIC 
 
@@ -337,21 +338,45 @@ displayMatches(finals);
 
 // EVENT LISTENERS
 
-playButton.addEventListener("click", () => {
-  tournamentHeading.style.display = "none";
-  playButton.style.display = "none";
-  teamsHeading.style.display = "block";
-  game.style.justifyContent = 'center';
-  for (let i = 0; i < teamCards.length; i++) {
-      teamCards[i].style.display = "inline";
-  };
-  for (let group in groups) {
-      const teamArray = groups[group];
-      const teamElements = teamCards[['A', 'B', 'C'].indexOf(group)].getElementsByClassName('teams');
-      for (let i = 0; i < teamArray.length; i++) {
-          if (teamElements[i]) {
-              teamElements[i].innerText = `${teamArray[i].Team} ${teamArray[i].FIBARanking}`;
-          }
+let isMusicPlaying = false;
+musicButtons.forEach(button => {
+  button.addEventListener('click', () => {
+      if (button.classList.contains('fa-volume-xmark')) {
+          song.play();
+          musicButtons[0].style.display = 'block';
+          musicButtons[1].style.display = 'none'; 
+      } else {
+          song.pause();
+          musicButtons[0].style.display = 'none';
+          musicButtons[1].style.display = 'block'; 
       }
+      isMusicPlaying = !isMusicPlaying; 
+  });
+});
+
+playButton.addEventListener("click", () => {
+  playButton.style.display = "none";
+  heading.innerText = 'Teams';
+  for (let group in groups) {
+      const teams = groups[group];
+      const cards = document.createElement('div');
+      cards.classList.add('group-card');
+      const cardGroups = document.createElement('h3');
+      cardGroups.innerText = `Group ${group}`;
+      cards.appendChild(cardGroups);
+      teams.forEach(team => {
+          const teamsP = document.createElement('p');
+          teamsP.innerText = `${team.Team} ${team.FIBARanking}`;
+          cards.appendChild(teamsP);
+      });
+      groupsContainer.appendChild(cards);
   }
+  setTimeout(() => {
+  playMsg.style.visibility = 'visible';
+  }, 4000)
+});
+
+playMsg.addEventListener('click', () => {
+  playMsg.style.display = 'none';
+  groupsContainer.style.display = 'none';
 });
