@@ -59,7 +59,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 10px;
 }
 
 .play-button {
@@ -110,7 +109,7 @@ body {
 }
 
 .statistics-container {
-  font-size: 21px;
+  font-size: 20px;
 }
 
 .statistics-container td {
@@ -140,15 +139,15 @@ body {
 .group-card {
   width: 250px;
   height: 190px;
-  margin: 21px;
+  margin: 20px;
   border: 3.5px solid black;
-  font-size: 21px;
+  font-size: 20px;
 }
 
 .group-stage-card {
-  font-size: 21px;
+  font-size: 20px;
   height: 225px;
-  margin: 21px;
+  margin: 20px;
 }
 
 .group-card h3,
