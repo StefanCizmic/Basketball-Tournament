@@ -61,30 +61,79 @@ body {
   align-items: center;
 }
 
-.game button {
+.play-button {
   font-family: "CustomFont", sans-serif;
   font-size: 16px;
   padding: 25px;
   margin-bottom: 50px;
 }
 
-.game button:hover {
+.play-again {
+  display: none;
+}
+
+.play-button, .play-again:hover {
   cursor: pointer;
 }
+
 
 .play-msg {
   visibility: hidden;
   font-size: 14px;
 }
 
-.play-msg:hover {
+.proceed-msg,
+.knockouts-msg,
+.draw-msg,
+.semi-finals-msg,
+.finals-msg {
+  display: none;
+  font-size: 14px;
+}
+
+.play-msg:hover,
+.proceed-msg:hover,
+.knockouts-msg:hover,
+.draw-msg:hover,
+.semi-finals-msg:hover,
+.finals-msg:hover {
   cursor: pointer;
 }
 
-.groups-container {
+.groups-container,
+.group-stage-container,
+.quarter-finals-container {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.statistics-container {
+  font-size: 13px;
+}
+
+.statistics-container td {
+  padding: 2.5px;
+  color: #fff;
+  text-align: center;
+}
+
+.statistics-container th {
+  padding: 3.5px;
+}
+
+.draw-container {
+  margin-bottom: 20px;
+}
+
+.draw-container h3 {
+  margin: 10px 0px;
+}
+
+.draw-container p {
+  margin: 5px;
+  padding-left: 20px;
+  color: #fff;
 }
 
 .group-card {
@@ -95,14 +144,22 @@ body {
   font-size: 14px;
 }
 
-.group-card h3 {
+.group-stage-card {
+  font-size: 14px;
+  height: 225px;
+  margin: 15px;
+}
+
+.group-card h3,
+.group-stage-card h3 {
   font-weight: 600;
   text-align: center;
   margin-top: 8px;
 }
 
-.group-card p {
-  color: #e8e4c9;
+.group-card p,
+.group-stage-card p {
+  color: #fff;
   margin: 12px;
   text-align: center;
 }
