@@ -436,7 +436,7 @@ playMsg.addEventListener('click', () => {
     playMsg.style.display = 'none';
     groupsContainer.style.display = 'none';
     heading.innerText = 'Group Stage';
-    displayMatches(groupStage, Object.keys(groupStage)[groupIndex], groupStageContainer, proceedMsg, 50);
+    displayMatches(groupStage, Object.keys(groupStage)[groupIndex], groupStageContainer, proceedMsg, 1100);
 });
 
 proceedMsg.addEventListener('click', () => {
