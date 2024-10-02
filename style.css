@@ -138,7 +138,7 @@ body {
 
 .group-card {
   width: 250px;
-  height: 220px;
+  height: 205px;
   margin: 20px;
   border: 3.5px solid black;
   font-size: 19px;
@@ -155,6 +155,7 @@ body {
   font-weight: 600;
   text-align: center;
   margin-top: 8px;
+  margin-bottom: 5px;
 }
 
 .group-card p,
