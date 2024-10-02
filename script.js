@@ -33,8 +33,6 @@ let quarterFinals = {};
 let semiFinals = {};
 let finals = {};
 
-console.log(finals);
-
 const getWinProbability = (team1, team2) => {
     const teamOneProbability = +(
         (team2.FIBARanking / (team1.FIBARanking + team2.FIBARanking)) *
@@ -319,26 +317,6 @@ musicButtons.forEach(button => {
     });
 });
 
-playButton.addEventListener("click", () => {
-    playButton.style.display = "none";
-    heading.innerText = 'Teams';
-    const cards = createCards(groups);
-    cards.forEach((card, index) => {
-        card.classList.add('group-card');
-        const teams = groups[Object.keys(groups)[index]];
-        const cardP = card.querySelectorAll('p');
-        cardP.forEach((p, i) => {
-            if (teams[i]) {
-                p.innerText = `${teams[i].Team} ${teams[i].FIBARanking}`;
-            }
-        });
-        groupsContainer.appendChild(card);
-    });
-    setTimeout(() => {
-        playMsg.style.visibility = 'visible';
-    }, 4000);
-});
-
 const createCards = (stage) => {
     let cards = [];
     for (let group in stage) {
@@ -433,6 +411,26 @@ const displayDraw = () => {
         });
     }
 }
+
+playButton.addEventListener("click", () => {
+    playButton.style.display = "none";
+    heading.innerText = 'Teams';
+    const cards = createCards(groups);
+    cards.forEach((card, index) => {
+        card.classList.add('group-card');
+        const teams = groups[Object.keys(groups)[index]];
+        const cardP = card.querySelectorAll('p');
+        cardP.forEach((p, i) => {
+            if (teams[i]) {
+                p.innerText = `${teams[i].Team} ${teams[i].FIBARanking}`;
+            }
+        });
+        groupsContainer.appendChild(card);
+    });
+    setTimeout(() => {
+        playMsg.style.visibility = 'visible';
+    }, 4000);
+});
 
 playMsg.addEventListener('click', () => {
     playMsg.style.display = 'none';
