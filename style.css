@@ -109,7 +109,7 @@ body {
 }
 
 .statistics-container {
-  font-size: 20px;
+  font-size: 19px;
 }
 
 .statistics-container td {
@@ -148,6 +148,7 @@ body {
   font-size: 20px;
   height: 225px;
   margin: 20px;
+  padding-bottom: 15px;
 }
 
 .group-card h3,
