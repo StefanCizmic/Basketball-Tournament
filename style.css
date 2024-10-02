@@ -35,7 +35,7 @@ body {
 }
 
 .heading-container {
-  font-size: 63px;
+  font-size: 50px;
   display: grid;
   grid-template-columns: 1fr 5fr 1fr;
 }
