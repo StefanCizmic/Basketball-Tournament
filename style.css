@@ -70,6 +70,7 @@ body {
 
 .play-again {
   display: none;
+  font-size: 19px;
 }
 
 .play-button, .play-again:hover {
@@ -131,6 +132,7 @@ body {
 }
 
 .draw-container p {
+  font-size: 20px;
   margin: 5px;
   padding-left: 20px;
   color: #fff;
