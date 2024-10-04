@@ -172,6 +172,10 @@ body {
   text-align: center;
 }
 
+.play-again {
+  font-size: 19px;
+}
+
 @keyframes headingAnimation {
   0% {
     top: 0;
