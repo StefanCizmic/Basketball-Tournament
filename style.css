@@ -46,6 +46,10 @@ body {
   align-items: center;
 }
 
+.heading-container i {
+  font-size: 20px;
+}
+
 .heading-container i:hover {
   cursor: pointer;
 }
