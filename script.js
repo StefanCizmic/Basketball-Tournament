@@ -1,6 +1,8 @@
 import groupsJSON from './data/groups.json' with {type: 'json'};
 let groups = groupsJSON;
 
+// DOM
+
 const musicButtons = document.querySelectorAll('.fa-volume-high, .fa-volume-xmark');
 const song = document.getElementById('song');
 const playButton = document.getElementById("play-button");
@@ -20,6 +22,8 @@ const drawContainer = document.getElementById('draw-container')
 const quarterFinalsContainer = document.getElementById('quarter-finals-container')
 const semiFinalsContainer = document.getElementById('semi-finals-container')
 const finalsContainer = document.getElementById('finals-container')
+
+// GAME LOGIC
 
 let groupStage = {};
 let groupStageStatistics = {};
@@ -411,6 +415,8 @@ const displayDraw = () => {
         });
     }
 }
+
+// Event Listeners
 
 playButton.addEventListener("click", () => {
     playButton.style.display = "none";
