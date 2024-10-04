@@ -416,7 +416,7 @@ const displayDraw = () => {
     }
 }
 
-// Event Listeners
+// EVENT LISTENERS
 
 playButton.addEventListener("click", () => {
     playButton.style.display = "none";
