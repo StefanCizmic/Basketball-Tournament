@@ -485,7 +485,7 @@ finalsMsg.addEventListener('click', () => {
         heading.style.display = 'none';
         gameContainer.style.alignItems = 'start';
         playAgain.style.display = 'block';
-    }, 4000)
+    }, 4050)
 })
 
 playAgain.addEventListener('click', () => {
