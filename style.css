@@ -47,7 +47,7 @@ body {
 }
 
 .heading-container i {
-  font-size: 40px;
+  font-size: 38px;
 }
 
 .heading-container i:hover {
@@ -173,7 +173,7 @@ body {
 }
 
 .play-again {
-  font-size: 19px;
+  font-size: 25px;
 }
 
 @keyframes headingAnimation {
