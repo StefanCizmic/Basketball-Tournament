@@ -47,7 +47,7 @@ body {
 }
 
 .heading-container i {
-  font-size: 45px;
+  font-size: 42px;
 }
 
 .heading-container i:hover {
@@ -145,7 +145,7 @@ body {
 .group-card {
   width: 250px;
   height: 190px;
-  margin: 25px;
+  margin: 32px;
   border: 3.5px solid black;
   font-size: 20px;
 }
