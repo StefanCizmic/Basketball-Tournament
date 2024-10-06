@@ -116,6 +116,7 @@ body {
 
 .statistics-container {
   font-size: 19px;
+  background: pink;
 }
 
 .statistics-container td {
@@ -130,7 +131,6 @@ body {
 
 .draw-container {
   padding-bottom: 25px;
-  background: pink;
 }
 
 .draw-container h3 {
