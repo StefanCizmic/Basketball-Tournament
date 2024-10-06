@@ -117,7 +117,7 @@ body {
 
 .statistics-container {
   font-size: 19px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.35);
 }
 
 .statistics-container td {
@@ -128,6 +128,7 @@ body {
 
 .statistics-container th {
   padding: 4px;
+  color: #87CEEB;
 }
 
 .draw-container {
