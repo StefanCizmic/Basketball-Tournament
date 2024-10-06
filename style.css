@@ -94,6 +94,7 @@ body {
 .finals-msg {
   display: none;
   font-size: 19px;
+  color: white;
 }
 
 .play-msg:hover,
@@ -129,6 +130,7 @@ body {
 
 .draw-container {
   padding-bottom: 25px;
+  background: pink;
 }
 
 .draw-container h3 {
