@@ -85,6 +85,7 @@ body {
 .play-msg {
   visibility: hidden;
   font-size: 19px;
+  color: white;
 }
 
 .proceed-msg,
@@ -116,7 +117,7 @@ body {
 
 .statistics-container {
   font-size: 19px;
-  background: pink;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .statistics-container td {
