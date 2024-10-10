@@ -23,6 +23,24 @@ const quarterFinalsContainer = document.getElementById('quarter-finals-container
 const semiFinalsContainer = document.getElementById('semi-finals-container')
 const finalsContainer = document.getElementById('finals-container')
 
+// MUSIC 
+
+let isMusicPlaying = false;
+musicButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        if (button.classList.contains('fa-volume-xmark')) {
+            song.play();
+            musicButtons[0].style.display = 'block';
+            musicButtons[1].style.display = 'none';
+        } else {
+            song.pause();
+            musicButtons[0].style.display = 'none';
+            musicButtons[1].style.display = 'block';
+        }
+        isMusicPlaying = !isMusicPlaying;
+    });
+});
+
 // GAME LOGIC
 
 let groupStage = {};
@@ -304,22 +322,6 @@ getSemiFinals();
 getMatches(semiFinals);
 getFinals();
 getMatches(finals);
-
-let isMusicPlaying = false;
-musicButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        if (button.classList.contains('fa-volume-xmark')) {
-            song.play();
-            musicButtons[0].style.display = 'block';
-            musicButtons[1].style.display = 'none';
-        } else {
-            song.pause();
-            musicButtons[0].style.display = 'none';
-            musicButtons[1].style.display = 'block';
-        }
-        isMusicPlaying = !isMusicPlaying;
-    });
-});
 
 const createCards = (stage) => {
     let cards = [];
